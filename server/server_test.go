@@ -118,7 +118,92 @@ func TestServeHTTP(t *testing.T) {
 	})
 
 	t.Run("GET /receive/flush", func(t *testing.T) {
+		t.Run("no messages in the queue", func(t *testing.T) {
+			mc.msgs = []receiver.Message{}
 
+			resp, err := http.Get(hs.URL + "/receive/flush")
+			if err != nil {
+				t.Fatalf("expected no error, got: %s", err)
+			}
+			if want, got := http.StatusOK, resp.StatusCode; want != got {
+				t.Errorf("want %s, got %s", http.StatusText(want), http.StatusText(got))
+			}
+
+			body, err := io.ReadAll(resp.Body)
+			resp.Body.Close()
+			if err != nil {
+				t.Fatalf("expected no error, got: %s", err)
+			}
+
+			var got []receiver.Message
+			if err := json.Unmarshal(body, &got); err != nil {
+				t.Fatalf("expected no error, got: %s", err)
+			}
+
+			if len(got) != 0 {
+				t.Errorf("expected an empty response, got\n%#v", got)
+			}
+		})
+
+		t.Run("one message in the queue", func(t *testing.T) {
+			want := []receiver.Message{receiver.Message{Account: "0"}}
+			mc.msgs = want
+
+			resp, err := http.Get(hs.URL + "/receive/flush")
+			if err != nil {
+				t.Fatalf("expected no error, got: %s", err)
+			}
+			if want, got := http.StatusOK, resp.StatusCode; want != got {
+				t.Errorf("want %s, got %s", http.StatusText(want), http.StatusText(got))
+			}
+
+			body, err := io.ReadAll(resp.Body)
+			resp.Body.Close()
+			if err != nil {
+				t.Fatalf("expected no error, got: %s", err)
+			}
+
+			var got []receiver.Message
+			if err := json.Unmarshal(body, &got); err != nil {
+				t.Fatalf("expected no error, got: %s", err)
+			}
+
+			if !reflect.DeepEqual(want, got) {
+				t.Errorf("want\n%#v\ngot\n%#v", want, got)
+			}
+		})
+
+		t.Run("three messages in the queue", func(t *testing.T) {
+			want := []receiver.Message{
+				receiver.Message{Account: "0"},
+				receiver.Message{Account: "1"},
+				receiver.Message{Account: "2"},
+			}
+			mc.msgs = want
+
+			resp, err := http.Get(hs.URL + "/receive/flush")
+			if err != nil {
+				t.Fatalf("expected no error, got: %s", err)
+			}
+			if want, got := http.StatusOK, resp.StatusCode; want != got {
+				t.Errorf("want %s, got %s", http.StatusText(want), http.StatusText(got))
+			}
+
+			body, err := io.ReadAll(resp.Body)
+			resp.Body.Close()
+			if err != nil {
+				t.Fatalf("expected no error, got: %s", err)
+			}
+
+			var got []receiver.Message
+			if err := json.Unmarshal(body, &got); err != nil {
+				t.Fatalf("expected no error, got: %s", err)
+			}
+
+			if !reflect.DeepEqual(want, got) {
+				t.Errorf("want\n%#v\ngot\n%#v", want, got)
+			}
+		})
 	})
 
 	t.Run("anything else", func(t *testing.T) {
