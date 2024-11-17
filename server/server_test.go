@@ -1,6 +1,10 @@
 package server
 
-import "github.com/kalbasit/signal-receiver/receiver"
+import (
+	"testing"
+
+	"github.com/kalbasit/signal-receiver/receiver"
+)
 
 type mockClient struct {
 	msgs []receiver.Message
@@ -19,6 +23,27 @@ func (mc *mockClient) Pop() *receiver.Message {
 
 func (mc *mockClient) Flush() []receiver.Message {
 	msgs := mc.msgs
-	mc.msgs = []Message{}
+	mc.msgs = []receiver.Message{}
 	return msgs
+}
+
+func TestServeHTTP(t *testing.T) {
+	mc := &mockClient{msgs: []receiver.Message{}}
+	s := Server{sarc: mc}
+
+	t.Run("GET /receive/pop", func(t *testing.T) {
+
+	})
+
+	t.Run("GET /receive/flush", func(t *testing.T) {
+
+	})
+
+	t.Run("anything else", func(t *testing.T) {
+		mc.msgs = []receiver.Message{}
+
+		for _, verb := range []string{"POST", "PUT", "PATCH", "DELETE"} {
+
+		}
+	})
 }
