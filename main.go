@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"net/url"
 
+	"github.com/kalbasit/signal-receiver/receiver"
 	"github.com/kalbasit/signal-receiver/server"
-	"github.com/kalbasit/signal-receiver/signalapireceiver"
 )
 
 var signalApiURL string
@@ -39,7 +39,7 @@ func main() {
 	uri.Path = fmt.Sprintf("/v1/receive/%s", signalAccount)
 	log.Printf("the fully qualified URL for signal-api was computed as %q", uri.String())
 
-	sarc, err := signalapireceiver.New(uri)
+	sarc, err := receiver.New(uri)
 	if err != nil {
 		panic(err)
 	}

@@ -1,4 +1,4 @@
-package signalapireceiver
+package receiver
 
 import (
 	"encoding/json"
