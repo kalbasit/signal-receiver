@@ -8,7 +8,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/kalbasit/signal-receiver/receiver"
+	"github.com/kalbasit/signal-api-receiver/receiver"
 )
 
 type mockClient struct {

@@ -1,4 +1,4 @@
-module github.com/kalbasit/signal-receiver
+module github.com/kalbasit/signal-api-receiver
 
 go 1.22.6
 

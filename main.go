@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/kalbasit/signal-receiver/receiver"
-	"github.com/kalbasit/signal-receiver/server"
+	"github.com/kalbasit/signal-api-receiver/receiver"
+	"github.com/kalbasit/signal-api-receiver/server"
 )
 
 var signalApiURL string

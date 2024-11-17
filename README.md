@@ -1,1 +1,1 @@
-# signal-receiver
+# signal-api-receiver

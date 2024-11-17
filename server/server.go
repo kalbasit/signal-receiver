@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/kalbasit/signal-receiver/receiver"
+	"github.com/kalbasit/signal-api-receiver/receiver"
 )
 
 const usage = `
