@@ -25,5 +25,4 @@ go.work.sum
 .env
 
 # Binaries
-/main
 /signal-api-receiver

@@ -89,7 +89,7 @@ spec:
         - image: kalbasit/signal-receiver:latest
           name: signal-receiver
           args:
-            - /app/main
+            - /app/signal-api-receiver
             - -signal-api-url=wss://signal-api.example.com
             - -signal-account=+19876543210
           ports:

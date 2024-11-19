@@ -9,17 +9,17 @@ RUN go mod download
 COPY . .
 
 ENV CGO_ENABLED=0
-RUN go build -o main .
+RUN go build ./cmd/signal-api-receiver
 
 FROM scratch
 
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=builder /usr/share/zoneinfo /usr/share/zoneinfo
 
-COPY --from=builder /app/main /app/main
+COPY --from=builder /app/signal-api-receiver /app/signal-api-receiver
 
 WORKDIR /app
 
 EXPOSE 8105
 
-CMD ["/app/main"]
+CMD ["/app/signal-api-receiver"]
