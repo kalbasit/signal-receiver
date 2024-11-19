@@ -45,6 +45,7 @@ specific use case.
 `signal-api-receiver` exposes the following API endpoints:
 
 * `/receive/pop`:
+
   * Returns one message at a time from the queue.
   * If no messages are available, it returns a `204 No Content` status.
 * `/receive/flush`:
