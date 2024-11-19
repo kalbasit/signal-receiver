@@ -97,6 +97,10 @@ spec:
               name: receiver-web
 ```
 
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](/LICENSE) file for details.
+
 [@bbernhard]: https://github.com/bbernhard
 [exec-mode]: https://github.com/bbernhard/signal-cli-rest-api?tab=readme-ov-file#execution-modes
 [signal-cli-rest-api]: https://github.com/bbernhard/signal-cli-rest-api
