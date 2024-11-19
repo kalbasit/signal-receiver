@@ -4,7 +4,7 @@
 
 ### Problem statement
 
-I use the excellent [signal-cli-rest-api][signal-cli-rest-api] by @bbernhard on
+I use the excellent [signal-cli-rest-api][signal-cli-rest-api] by [@bbernhard][@bbernhard] on
 my server, and my home-assistant is configured to send me and the Home group
 notifications of all kinds. Sending messages quickly is crucial for many of my
 automations, so I'm running the API [in `json-rpc` mode][exec-mode].
@@ -97,6 +97,7 @@ spec:
               name: receiver-web
 ```
 
-[signal-cli-rest-api]: https://github.com/bbernhard/signal-cli-rest-api
+[@bbernhard]: https://github.com/bbernhard
 [exec-mode]: https://github.com/bbernhard/signal-cli-rest-api?tab=readme-ov-file#execution-modes
+[signal-cli-rest-api]: https://github.com/bbernhard/signal-cli-rest-api
 [signal_messenger]: https://www.home-assistant.io/integrations/signal_messenger/#sending-messages-to-signal-to-trigger-events
