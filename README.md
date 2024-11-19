@@ -45,11 +45,57 @@ specific use case.
 `signal-api-receiver` exposes the following API endpoints:
 
 * `/receive/pop`:
-    * Returns one message at a time from the queue.
-    * If no messages are available, it returns a `204 No Content` status.
+    * Returns one message at a time from the queue.
+    * If no messages are available, it returns a `204 No Content` status.
 * `/receive/flush`:
-    * Returns all available messages as a list.
-    * If no messages are available, it returns an empty list (`[]`).
+    * Returns all available messages as a list.
+    * If no messages are available, it returns an empty list (`[]`).
+
+## Usage
+
+To run `signal-api-receiver`, you need to provide the following command-line flags:
+
+* `-signal-account string`: The account number for Signal.
+* `-signal-api-url string`: The URL of the Signal API, including the scheme (e.g., `wss://signal-api.example.com`).
+
+By default, the server starts on `:8105`. You can change this using the `-addr` flag (e.g., `-addr :8080`).
+
+
+### Kubernetes Deployment Example
+
+Here's an example of how to deploy `signal-api-receiver` on Kubernetes:
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: signal-api-receiver
+  labels:
+    app: signal-receiver
+    tier: api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: signal-receiver
+      tier: api
+  template:
+    metadata:
+      labels:
+        app: signal-receiver
+        tier: api
+    spec:
+      containers:
+        - image: kalbasit/signal-receiver:latest
+          name: signal-receiver
+          args:
+            - /app/main
+            - -signal-api-url=ws://YOUR_SIGNAL_API_URL
+            - -signal-account=YOUR_SIGNAL_ACCOUNT_NUMBER
+          ports:
+            - containerPort: 8105
+              name: receiver-web
+```
 
 [signal-cli-rest-api]: https://github.com/bbernhard/signal-cli-rest-api
 [exec-mode]: https://github.com/bbernhard/signal-cli-rest-api?tab=readme-ov-file#execution-modes
