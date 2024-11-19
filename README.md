@@ -40,6 +40,17 @@ These alternatives might be more comprehensive solutions in the long term, but
 creating the wrapper provided a more immediate and focused solution for my
 specific use case.
 
+## API Endpoints
+
+`signal-api-receiver` exposes the following API endpoints:
+
+* `/receive/pop`:
+    * Returns one message at a time from the queue.
+    * If no messages are available, it returns a `204 No Content` status.
+* `/receive/flush`:
+    * Returns all available messages as a list.
+    * If no messages are available, it returns an empty list (`[]`).
+
 [signal-cli-rest-api]: https://github.com/bbernhard/signal-cli-rest-api
 [exec-mode]: https://github.com/bbernhard/signal-cli-rest-api?tab=readme-ov-file#execution-modes
 [signal_messenger]: https://www.home-assistant.io/integrations/signal_messenger/#sending-messages-to-signal-to-trigger-events
