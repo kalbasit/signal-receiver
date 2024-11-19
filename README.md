@@ -90,8 +90,8 @@ spec:
           name: signal-receiver
           args:
             - /app/main
-            - -signal-api-url=ws://YOUR_SIGNAL_API_URL
-            - -signal-account=YOUR_SIGNAL_ACCOUNT_NUMBER
+            - -signal-api-url=wss://signal-api.example.com
+            - -signal-account=+19876543210
           ports:
             - containerPort: 8105
               name: receiver-web
