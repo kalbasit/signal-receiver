@@ -44,6 +44,11 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if r.URL.Path == "/healthz" {
+		w.WriteHeader(http.StatusNoContent)
+		return
+	}
+
 	if r.URL.Path == "/receive/pop" {
 		msg := s.sarc.Pop()
 		if msg == nil {
