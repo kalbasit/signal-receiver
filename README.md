@@ -95,6 +95,18 @@ spec:
           ports:
             - containerPort: 8105
               name: receiver-web
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: receiver-web
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: receiver-web
+            initialDelaySeconds: 5
+            periodSeconds: 10
 ```
 
 ## License
