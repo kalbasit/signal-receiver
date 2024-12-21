@@ -3,6 +3,7 @@ package server
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/kalbasit/signal-api-receiver/receiver"
@@ -74,5 +75,10 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "text/plain")
 	w.WriteHeader(http.StatusNotFound)
-	w.Write([]byte(fmt.Sprintf("ERROR! GET %s is not supported. The supported paths are below:", r.URL.Path) + usage))
+
+	notFoundMessage := []byte(fmt.Sprintf("ERROR! GET %s is not supported. The supported paths are below:", r.URL.Path) + usage)
+
+	if _, err := w.Write(notFoundMessage); err != nil {
+		log.Printf("error writing the body: %s", err)
+	}
 }

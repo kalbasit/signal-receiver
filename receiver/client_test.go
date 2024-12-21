@@ -15,24 +15,24 @@ func TestFlush(t *testing.T) {
 	})
 
 	t.Run("return the message if only one is there", func(t *testing.T) {
-		c := &Client{messages: []Message{Message{Account: "1"}}}
+		c := &Client{messages: []Message{{Account: "1"}}}
 
-		if want, got := []Message{Message{Account: "1"}}, c.Flush(); !reflect.DeepEqual(want, got) {
+		if want, got := []Message{{Account: "1"}}, c.Flush(); !reflect.DeepEqual(want, got) {
 			t.Errorf("want %#v got %#v", want, got)
 		}
 	})
 
 	t.Run("return messages in order", func(t *testing.T) {
 		c := &Client{messages: []Message{
-			Message{Account: "0"},
-			Message{Account: "1"},
-			Message{Account: "2"},
+			{Account: "0"},
+			{Account: "1"},
+			{Account: "2"},
 		}}
 
 		want := []Message{
-			Message{Account: "0"},
-			Message{Account: "1"},
-			Message{Account: "2"},
+			{Account: "0"},
+			{Account: "1"},
+			{Account: "2"},
 		}
 		got := c.Flush()
 		if !reflect.DeepEqual(want, got) {
@@ -51,7 +51,7 @@ func TestPop(t *testing.T) {
 	})
 
 	t.Run("return the message if only one is there", func(t *testing.T) {
-		c := &Client{messages: []Message{Message{Account: "1"}}}
+		c := &Client{messages: []Message{{Account: "1"}}}
 
 		want := Message{Account: "1"}
 		got := c.Pop()
@@ -62,9 +62,9 @@ func TestPop(t *testing.T) {
 
 	t.Run("return messages in order", func(t *testing.T) {
 		c := &Client{messages: []Message{
-			Message{Account: "0"},
-			Message{Account: "1"},
-			Message{Account: "2"},
+			{Account: "0"},
+			{Account: "1"},
+			{Account: "2"},
 		}}
 
 		for i := range c.messages {
