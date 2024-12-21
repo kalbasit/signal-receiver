@@ -11,9 +11,11 @@ import (
 	"github.com/kalbasit/signal-api-receiver/server"
 )
 
-var addr string
-var signalApiURL string
-var signalAccount string
+var (
+	addr          string
+	signalApiURL  string
+	signalAccount string
+)
 
 func init() {
 	flag.StringVar(&addr, "addr", ":8105", "The address to listen and serve on")
@@ -50,5 +52,8 @@ func main() {
 	srv := server.New(sarc)
 
 	log.Print("Starting HTTP server on :8105")
-	http.ListenAndServe(addr, srv)
+
+	if err := http.ListenAndServe(addr, srv); err != nil {
+		log.Printf("error starting the server on %q: %s", addr, err)
+	}
 }
