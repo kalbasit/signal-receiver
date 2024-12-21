@@ -3,7 +3,10 @@ package server
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
+	"sync/atomic"
+	"time"
 
 	"github.com/kalbasit/signal-api-receiver/receiver"
 )
@@ -15,17 +18,37 @@ GET /receive/flush => Return all messages
 
 // Server represent the HTTP server that exposes the pop/flush routes
 type Server struct {
-	sarc client
+	sarc       client
+	repeatLast bool
+	last       atomic.Pointer[receiver.Message]
 }
 
 type client interface {
+	Connect() error
+	ReceiveLoop() error
 	Pop() *receiver.Message
 	Flush() []receiver.Message
 }
 
 // New returns a new Server
-func New(sarc client) *Server {
-	return &Server{sarc: sarc}
+func New(sarc client, repeatLastMessage bool) *Server {
+	s := &Server{sarc: sarc, repeatLast: repeatLastMessage}
+	go s.start()
+	return s
+}
+
+func (s *Server) start() {
+	for {
+		if err := s.sarc.ReceiveLoop(); err != nil {
+			log.Printf("Error in the receive loop: %v", err)
+		}
+	Reconnect:
+		if err := s.sarc.Connect(); err != nil {
+			log.Printf("Error reconnecting: %v", err)
+			time.Sleep(time.Second)
+			goto Reconnect
+		}
+	}
 }
 
 // ServeHTTP implements the http.Handler interface
@@ -51,6 +74,13 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	if r.URL.Path == "/receive/pop" {
 		msg := s.sarc.Pop()
+		if s.repeatLast {
+			if msg == nil {
+				msg = s.last.Load()
+			} else {
+				s.last.Store(msg)
+			}
+		}
 		if msg == nil {
 			w.WriteHeader(http.StatusNoContent)
 			return
@@ -65,6 +95,9 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	if r.URL.Path == "/receive/flush" {
 		msgs := s.sarc.Flush()
+		if s.repeatLast && len(msgs) > 0 {
+			s.last.Store(&msgs[len(msgs)-1])
+		}
 		w.Header().Set("Content-Type", "application/json")
 		if err := json.NewEncoder(w).Encode(msgs); err != nil {
 			w.WriteHeader(http.StatusInternalServerError)

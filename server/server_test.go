@@ -15,6 +15,16 @@ type mockClient struct {
 	msgs []receiver.Message
 }
 
+func (mc *mockClient) Connect() error {
+	return nil
+}
+
+func (mc *mockClient) ReceiveLoop() error {
+	var ch chan struct{}
+	<-ch
+	return nil
+}
+
 func (mc *mockClient) Pop() *receiver.Message {
 	if len(mc.msgs) == 0 {
 		return nil
@@ -34,8 +44,8 @@ func (mc *mockClient) Flush() []receiver.Message {
 
 func TestServeHTTP(t *testing.T) {
 	mc := &mockClient{msgs: []receiver.Message{}}
-	s := Server{sarc: mc}
-	hs := httptest.NewServer(&s)
+	s := New(mc, true)
+	hs := httptest.NewServer(s)
 	defer hs.Close()
 
 	t.Run("GET /receive/pop", func(t *testing.T) {
@@ -81,9 +91,9 @@ func TestServeHTTP(t *testing.T) {
 
 		t.Run("three messages in the queue", func(t *testing.T) {
 			want := []receiver.Message{
-				receiver.Message{Account: "0"},
-				receiver.Message{Account: "1"},
-				receiver.Message{Account: "2"},
+				{Account: "0"},
+				{Account: "1"},
+				{Account: "2"},
 			}
 			mc.msgs = want
 
@@ -146,7 +156,7 @@ func TestServeHTTP(t *testing.T) {
 		})
 
 		t.Run("one message in the queue", func(t *testing.T) {
-			want := []receiver.Message{receiver.Message{Account: "0"}}
+			want := []receiver.Message{{Account: "0"}}
 			mc.msgs = want
 
 			resp, err := http.Get(hs.URL + "/receive/flush")
@@ -175,9 +185,9 @@ func TestServeHTTP(t *testing.T) {
 
 		t.Run("three messages in the queue", func(t *testing.T) {
 			want := []receiver.Message{
-				receiver.Message{Account: "0"},
-				receiver.Message{Account: "1"},
-				receiver.Message{Account: "2"},
+				{Account: "0"},
+				{Account: "1"},
+				{Account: "2"},
 			}
 			mc.msgs = want
 
