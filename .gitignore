@@ -21,8 +21,13 @@
 go.work
 go.work.sum
 
-# env file
+# env file used by dbmate
 .env
 
-# Binaries
+# Go and Nix-related build result
 /signal-api-receiver
+/result
+/.direnv
+
+# Pre-commit configuration (auto-generated)
+/.pre-commit-config.yaml
